@@ -1,0 +1,10 @@
+item{ 
+name: car 
+label: 1 
+display_name: "car" 
+}
+item{
+name: person 
+label: 2 
+display_name: "person" 
+}
