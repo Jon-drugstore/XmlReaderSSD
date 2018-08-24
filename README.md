@@ -1,4 +1,5 @@
 # XmlReaderSSD
+Train your SSD directly from xml files without converting to lmdb 
 
 Software was tested on Ubuntu 16.04 with g++ 5.4.0
 
