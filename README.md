@@ -11,4 +11,4 @@ Next, folow weiliu89 README or if caffe-ssd already have built run: make -j8 in 
 
 # Examples
 
-Notice that labelmap.prototxt without background label. Make two train folders and two test folders with images and xml files respectively. In order to train network replace path in train and test files in annotated_data_param xmlDir - path to xml directory and imageDir - path to image folder with train and test folders. 
+Notice that labelmap.prototxt without background label. Make two train folders and two test folders with images and xml files respectively. In order to train network replace path in train and test files in annotated_data_param xmlDir(path to xml directory) and imageDir(path to image folder) with train and test folders. 
