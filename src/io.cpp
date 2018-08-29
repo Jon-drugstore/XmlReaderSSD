@@ -288,11 +288,11 @@ bool ReadXMLToAnnotatedDatum(const string& labelfile, const int img_height,
         ptree pt2 = v2.second;
         if (v2.first == "name") {
           string name = pt2.data();
-          //name = "\"" + name + "\"";
-          //if (name_to_label.find(name) == name_to_label.end()) {
-            //LOG(FATAL) << "Unknown name: " << name;
-          //}
-          int label = name_to_label.find(name)->second + 1;
+          name = "\"" + name + "\"";
+          if (name_to_label.find(name) == name_to_label.end()) {
+            LOG(FATAL) << "Unknown name: " << name;
+          }
+          int label = name_to_label.find(name)->second;
           bool found_group = false;
           for (int g = 0; g < anno_datum->annotation_group_size(); ++g) {
             AnnotationGroup* anno_group =
@@ -608,30 +608,49 @@ void MyReadLabelFileToLabelMap(const string& filename, bool include_background,
     map_item->set_label(label++);
     map_item->set_display_name("background");
   }
-  int counter = 0;
+  //int counter = 0;
+  vector<int> labels;
+  vector<string> names;
   while (std::getline(file, line)) {
     vector<string> fields;
     fields.clear();
-    size_t posF;
-    size_t posL;
-    posF = line.find_first_of(" ");
-    posL = line.find_last_of(" ");
 
-    if(posF == posL)
-      continue;
+    //if(posF == posL)
+    //  continue;
     boost::split(fields, line, boost::is_any_of(delimiter));
-    if(fields[0] == "display_name:" || fields[0] == "label:") continue;
-    
 
-    map_item = map->add_item();
+    std::string::iterator end_pos = std::remove(fields[0].begin(), fields[0].end(), ' ');
+    fields[0].erase(end_pos, fields[0].end());
 
-
-    if(fields[0] == "name:"){
-      map_item->set_name(fields[1]);
-      map_item->set_label(counter++); 
-
+    if(fields[0] == "name")
+    {
+      std::string::iterator end_pos = std::remove(fields[1].begin(), fields[1].end(), ' ');
+      fields[1].erase(end_pos, fields[1].end());
+      names.push_back(fields[1]);
     }
 
+    if(fields[0] == "label"){
+      std::string::iterator end_pos = std::remove(fields[1].begin(), fields[1].end(), ' ');
+      fields[1].erase(end_pos, fields[1].end());
+      labels.push_back(atoi(fields[1].c_str()));
+    }
+
+    /*if(fields.size()){
+      LOG(INFO) << fields[0];
+      LOG(INFO) << fields[1];
+      map_item = map->add_item();
+      map_item->set_name(fields[0]);
+      map_item->set_label(atoi(fields[1].c_str())); 
+
+    }*/
+
+  }
+
+  for(int i = 0; i < labels.size(); i++){
+
+      map_item = map->add_item();
+      map_item->set_name(names[i]);
+      map_item->set_label(labels[i]);
   }
   
 }

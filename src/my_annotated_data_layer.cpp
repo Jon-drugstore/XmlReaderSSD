@@ -92,12 +92,13 @@ void MyAnnotatedDataLayer<Dtype>::DataLayerSetUp(
   const bool is_color = true;
 
   LabelMap* label_map = new LabelMap();
-  MyReadLabelFileToLabelMap(label_map_file_, false, " ", label_map);
+  MyReadLabelFileToLabelMap(label_map_file_, false, ":", label_map);
   for (int i = 0; i < label_map->item_size(); i++){
       name_to_label_tmp.insert(std::pair<string, int>(label_map->item(i).name(), label_map->item(i).label() ) );
   }
 
-  std::map<string, int>::iterator it;
+  
+
 
   //const std::map<string, int> name_to_label = name_to_label_tmp;
   
@@ -203,6 +204,16 @@ void MyAnnotatedDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
   size_t pos1 = img_file_tmp.find_last_of(".");
   size_t pos2 = img_file_tmp.find_last_of(" ");
   const string encoding = img_file_tmp.substr(pos1, pos2); 
+
+//  std::map<string, int>::iterator it;
+//  for(it = name_to_label_tmp.begin(); it != name_to_label_tmp.end(); it++){
+//    LOG(INFO) << it->first;
+//    LOG(INFO) << it->second;
+//  }
+
+
+  //LabelMap* label_map = new LabelMap();
+  //MyReadLabelFileToLabelMap(label_map_file_, false, ":", label_map);
 
   ReadRichImageToAnnotatedDatum(lines_[lines_id_].first, lines_[lines_id_].second,
                                 img_height, img_width, is_color, encoding, AnnotatedDatum_AnnotationType_BBOX,
