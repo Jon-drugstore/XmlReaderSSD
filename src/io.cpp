@@ -288,7 +288,8 @@ bool ReadXMLToAnnotatedDatum(const string& labelfile, const int img_height,
         ptree pt2 = v2.second;
         if (v2.first == "name") {
           string name = pt2.data();
-          name = "\"" + name + "\"";
+
+          //name = "\"" + name + "\"";
           if (name_to_label.find(name) == name_to_label.end()) {
             LOG(FATAL) << "Unknown name: " << name;
           }
@@ -586,13 +587,28 @@ bool ReadLabelFileToLabelMap(const string& filename, bool include_background,
   return true;
 }
 
-void MyReadLabelFileToLabelMap(const string& filename, bool include_background,
-    const string& delimiter, LabelMap* map) {
+void MyReadLabelFileToLabelMap(const string& filename, LabelMap* map) {
   // cleanup
   map->Clear();
 
   std::ifstream file(filename.c_str());
-  string line;
+  int fileDescriptor = open(filename.c_str(), O_RDONLY);
+  google::protobuf::io::FileInputStream fileInput(fileDescriptor);
+  fileInput.SetCloseOnDelete( true );
+
+  if (!google::protobuf::TextFormat::Parse(&fileInput, map))
+  {
+    LOG(INFO) << "Failed to parse file!";
+    //return -1;
+  }
+  else
+  {
+    //retValue = true;
+    LOG(INFO) << "Read Input File - " << filename.c_str();
+  }
+
+
+  /*string line;
   // Every line can have [1, 3] number of fields.
   // The delimiter between fields can be one of " :;".
   // The order of the fields are:
@@ -634,7 +650,7 @@ void MyReadLabelFileToLabelMap(const string& filename, bool include_background,
       fields[1].erase(end_pos, fields[1].end());
       labels.push_back(atoi(fields[1].c_str()));
     }
-
+    */
     /*if(fields.size()){
       LOG(INFO) << fields[0];
       LOG(INFO) << fields[1];
@@ -644,14 +660,7 @@ void MyReadLabelFileToLabelMap(const string& filename, bool include_background,
 
     }*/
 
-  }
-
-  for(int i = 0; i < labels.size(); i++){
-
-      map_item = map->add_item();
-      map_item->set_name(names[i]);
-      map_item->set_label(labels[i]);
-  }
+  //}
   
 }
 

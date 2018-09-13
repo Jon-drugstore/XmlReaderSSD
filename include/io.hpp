@@ -202,8 +202,7 @@ inline bool ReadRichImageToAnnotatedDatum(const string& filename,
                       is_color, encoding, type, labeltype, name_to_label,
                       anno_datum);
 }
-void MyReadLabelFileToLabelMap(const string& filename, bool include_background,
-    const string& delimiter, LabelMap* map);
+void MyReadLabelFileToLabelMap(const string& filename, LabelMap* map);
 
 bool ReadXMLToAnnotatedDatum(const string& labelname, const int img_height,
     const int img_width, const std::map<string, int>& name_to_label,

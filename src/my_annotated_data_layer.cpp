@@ -92,13 +92,12 @@ void MyAnnotatedDataLayer<Dtype>::DataLayerSetUp(
   const bool is_color = true;
 
   LabelMap* label_map = new LabelMap();
-  MyReadLabelFileToLabelMap(label_map_file_, false, ":", label_map);
+  MyReadLabelFileToLabelMap(label_map_file_, label_map);
   for (int i = 0; i < label_map->item_size(); i++){
       name_to_label_tmp.insert(std::pair<string, int>(label_map->item(i).name(), label_map->item(i).label() ) );
   }
 
-  
-
+  //MapNameToLabel(label_map, &name_to_label_tmp);
 
   //const std::map<string, int> name_to_label = name_to_label_tmp;
   
